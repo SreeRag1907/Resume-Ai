@@ -87,7 +87,6 @@ function Summary({ enableNext }) {
             </Button>
           </div>
           <Textarea
-            className="mt-5"
             required
             value={summary}
             className="mt-4 h-32"
