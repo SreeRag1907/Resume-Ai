@@ -108,8 +108,8 @@ function SkillForm({ enableNext }) {
           ))}
         </div>
 
-        <div className="flex justify-between gap-4 mt-4">
-          <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row justify-between gap-4 mt-4">
+        <div className="flex flex-col md:flex-row gap-4">
             <Button variant="outline" onClick={addNewSkill}>
               + Add More Skill
             </Button>

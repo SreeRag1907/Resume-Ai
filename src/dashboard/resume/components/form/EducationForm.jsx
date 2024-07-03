@@ -146,7 +146,7 @@ function EducationForm({ enableNext }) {
   };
 
   return (
-    <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
+    <div className="p-4 shadow-lg rounded-lg border-t-primary border-t-4 mt-10 ">
       <h2 className="font-bold text-lg">Education</h2>
       <p>Add your educational details here..</p>
 
@@ -154,36 +154,39 @@ function EducationForm({ enableNext }) {
         {educationalList.map((formData, index) => (
           <div
             key={index}
-            className="grid grid-cols-2 mt-5 gap-3 border-2 p-4 rounded-lg shadow-md"
+            className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-3 border-2 p-4 rounded-lg shadow-md"
           >
-            <div className="col-span-2">
+            <div className="col-span-1 md:col-span-2">
               <label className="text-sm">University Name</label>
               <Input
                 name="universityName"
                 value={formData.universityName}
                 onChange={(event) => handleInputChange(event, index)}
                 required
+                className="w-full"
               />
             </div>
-            <div>
+            <div className="col-span-1">
               <label className="text-sm">Degree</label>
               <Input
                 name="degree"
                 value={formData.degree}
                 onChange={(event) => handleInputChange(event, index)}
                 required
+                className="w-full"
               />
             </div>
-            <div>
+            <div className="col-span-1">
               <label className="text-sm">Subject</label>
               <Input
                 name="subject"
                 value={formData.subject}
                 onChange={(event) => handleInputChange(event, index)}
                 required
+                className="w-full"
               />
             </div>
-            <div>
+            <div className="col-span-1">
               <label className="text-sm">Start Date</label>
               <Input
                 name="startDate"
@@ -191,9 +194,10 @@ function EducationForm({ enableNext }) {
                 value={formData.startDate}
                 onChange={(event) => handleInputChange(event, index)}
                 required
+                className="w-full"
               />
             </div>
-            <div>
+            <div className="col-span-1">
               <label className="text-sm">End Date</label>
               <Input
                 name="endDate"
@@ -201,11 +205,12 @@ function EducationForm({ enableNext }) {
                 value={formData.endDate}
                 onChange={(event) => handleInputChange(event, index)}
                 required
+                className="w-full"
               />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-1 md:col-span-2">
               <div className="flex justify-between items-center my-4">
-              <label className="text-sm">Description</label>
+                <label className="text-sm">Description</label>
                 <Button
                   variant="outline"
                   onClick={() => GenerateSummaryFromAI(index)}
@@ -222,22 +227,23 @@ function EducationForm({ enableNext }) {
                 value={formData.description}
                 onChange={(event) => handleInputChange(event, index)}
                 required
+                
+                className="w-full h-32"
               />
-             
             </div>
           </div>
         ))}
       </div>
-      <div className="flex justify-between gap-4 mt-4">
-        <div className="flex gap-4">
-          <Button variant="outline" onClick={addNewExp}>
+      <div className="flex flex-col md:flex-row justify-between gap-4 mt-4">
+        <div className="flex flex-col md:flex-row gap-4">
+          <Button variant="outline" onClick={addNewExp} className="w-full md:w-auto">
             + Add More Education
           </Button>
-          <Button onClick={removeList} disabled={educationalList.length <= 1 || loadingGenerate}>
+          <Button onClick={removeList} disabled={educationalList.length <= 1 || loadingGenerate} className="w-full md:w-auto">
             - Remove
           </Button>
         </div>
-        <Button type="submit" onClick={onSave} disabled={loadingSave || loadingGenerate}>
+        <Button type="submit" onClick={onSave} disabled={loadingSave || loadingGenerate} className="w-full md:w-auto">
           {loadingSave ? <LoaderCircle className="animate-spin" /> : "Save"}
         </Button>
       </div>

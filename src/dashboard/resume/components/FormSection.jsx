@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import PersonalForm from "./form/PersonalForm";
-import { ArrowLeft, ArrowRight, Home, LayoutGrid } from "lucide-react";
+import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { useState } from "react";
 import SummaryForm from "./form/SummaryForm";
 import ExperienceForm from "./form/ExperienceForm";
@@ -15,28 +15,28 @@ function FormSection() {
   const { resumeId } = useParams();
 
   return (
-    <div>
-      <div className="flex justify-between">
+    <div className="p-4">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
         <div className="flex gap-4">
           <Link to={"/dashboard"}>
-            <Button>
-              <Home />
+            <Button className="p-2 md:p-4">
+              <Home size={20} />
             </Button>
           </Link>
-          <ThemeColor/>
+          <ThemeColor />
         </div>
         <div className="flex gap-4">
           {activeIndex > 1 && (
             <Button
-              className="flex gap-2"
+              className="flex gap-2 p-2 md:p-4"
               onClick={() => setActiveIndex(activeIndex - 1)}
             >
-              <ArrowLeft />
-              Prev
+              <ArrowLeft size={20} />
+              <span className="hidden md:inline">Prev</span>
             </Button>
           )}
           <Button
-            className="flex gap-2"
+            className="flex gap-2 p-2 md:p-4"
             onClick={() => {
               if (activeIndex === 5) {
                 // Handle transition to ViewSection
@@ -47,7 +47,8 @@ function FormSection() {
             }}
             disabled={activeIndex < 5 && !enableNext}
           >
-            {activeIndex === 5 ? "View" : "Next"} <ArrowRight size={20} />
+            {activeIndex === 5 ? "View" : "Next"}
+            <ArrowRight size={20} />
           </Button>
         </div>
       </div>
@@ -59,20 +60,16 @@ function FormSection() {
       {activeIndex === 2 && (
         <SummaryForm enableNext={(v) => setEnableNext(v)} />
       )}
-
       {/* Education */}
       {activeIndex === 3 && (
         <EducationForm enableNext={(v) => setEnableNext(v)} />
       )}
-
       {/* Professional exp */}
       {activeIndex === 4 && (
         <ExperienceForm enableNext={(v) => setEnableNext(v)} />
       )}
-
       {/* Skills */}
       {activeIndex === 5 && <SkillForm enableNext={(v) => setEnableNext(v)} />}
-
       {/* View Section */}
       {activeIndex === 6 && (
         <Navigate to={"/my-resume/" + resumeId + "/view"} />
