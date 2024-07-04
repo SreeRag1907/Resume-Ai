@@ -1,4 +1,4 @@
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import GlobalApi from "../../../../service/GlobalApi";
 import Header from "@/components/custom/Header";
@@ -39,6 +39,10 @@ function ViewResume() {
         <div className="flex justify-center my-5 gap-4">
           <DownloadConfirmationDialog resumeRef={resumeRef} />
         </div>
+        <p className="text-center text-sm font-normal text-gray-700 my-5 block sm:hidden italic">
+          **To Download the Resume Properly I recommend you to use the Website in
+          Laptop/PC**
+        </p>
         <div className="resume-container" ref={resumeRef}>
           <PreviewSection />
         </div>
