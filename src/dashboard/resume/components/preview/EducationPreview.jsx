@@ -1,11 +1,11 @@
 import React from "react";
 
 function EducationPreview({ resumeInfo }) {
-  const hasEducation = resumeInfo?.education && resumeInfo.education.length > 0;
+  // const hasEducation = resumeInfo?.education && resumeInfo.education.length > 0;
 
   return (
     <div className="my-4 p-2">
-      {hasEducation && (
+      {/* {hasEducation && ( */}
         <>
           <h2
             className="text-center font-bold text-lg md:text-xl mb-2"
@@ -18,7 +18,7 @@ function EducationPreview({ resumeInfo }) {
             style={{ borderColor: resumeInfo?.themeColor }}
           />
 
-          {resumeInfo.education.map((education, index) => (
+          {resumeInfo?.education.map((education, index) => (
             <div key={index} className="my-3 md:my-5">
               <h2
                 className="text-sm md:text-md font-bold"
@@ -40,7 +40,7 @@ function EducationPreview({ resumeInfo }) {
             </div>
           ))}
         </>
-      )}
+      {/* )} */}
     </div>
   );
 }

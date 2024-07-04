@@ -42,13 +42,23 @@
   }
 
   .resume-container {
-    width: 280mm; /* A4 width */
-    min-height: 297mm; /* A4 height */
-    padding: 0mm 10mm;
-    margin: auto;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    width: 100%; /* Full width on all screens */
+    max-width: 280mm; /* Maximum width for A4 size */
+    min-height: 100vh; /* Minimum height to fill the screen */
+    padding: 10mm; /* Padding around the content */
+    margin: auto; /* Center the container */
+    background: white; /* White background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+    overflow: hidden; /* Hide overflow content */
+  }
+  
+  
+  @media (max-width: 768px) {
+    .resume-container {
+      width: calc(100% - 20px); /* Adjust width to fit within mobile screen */
+      max-width: none; /* Remove max-width for mobile */
+      padding: 5mm; /* Adjust padding for mobile */
+    }
   }
   
   @media print {
@@ -56,10 +66,18 @@
       margin: 0;
     }
     .resume-container {
+      width: 100%;
+      max-width: 210mm; /* A4 width */
+      min-height: 297mm; /* A4 height */
+      padding: 0;
+      margin: auto;
+      background: white;
       box-shadow: none;
-      page-break-after: always;
+      overflow: visible; /* Ensure content is visible */
+      page-break-after: auto; /* Prevent page breaks */
     }
   }
+  
   
   .bg-grid-pattern {
     background-image: 

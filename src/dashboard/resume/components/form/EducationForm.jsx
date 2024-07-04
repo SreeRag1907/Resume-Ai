@@ -13,7 +13,7 @@ function EducationForm({ enableNext }) {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const params = useParams();
 
-  const initialEducationalList = resumeInfo.education && resumeInfo.education.length > 0
+  const initialEducationalList = resumeInfo?.education?.length
     ? resumeInfo.education
     : [{
         universityName: "",
@@ -83,6 +83,12 @@ function EducationForm({ enableNext }) {
       const response = await GlobalApi.UpdateResumeDetail(params?.resumeId, data);
       toast.success("Education details updated successfully");
       console.log("Education details saved", response);
+      
+      // Update the context
+      setResumeInfo((prev) => ({
+        ...prev,
+        education: educationalList,
+      }));
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -108,10 +114,10 @@ function EducationForm({ enableNext }) {
   };
 
   useEffect(() => {
-    setResumeInfo({
-      ...resumeInfo,
+    setResumeInfo((prev) => ({
+      ...prev,
       education: educationalList,
-    });
+    }));
   }, [educationalList]);
 
   const GenerateSummaryFromAI = async (index) => {
@@ -120,7 +126,7 @@ function EducationForm({ enableNext }) {
   
     try {
       // Construct the prompt with actual degree, subject, and university name
-      const prompt = `Generate a concise description (50 words) for an educational background that includes a ${currentEducation.degree} in ${currentEducation.subject} from ${currentEducation.universityName}. Highlight key skills and knowledge acquired, emphasizing practical applications. Do not use placeholders or JSON formatting.`;
+      const prompt = `Generate a concise description (50 words) for an educational background that includes a ${currentEducation.degree} in ${currentEducation.subject} from ${currentEducation.universityName}. Highlight key skills and knowledge acquired, emphasizing practical applications.`;
   
       // Send prompt to AI for generating summary
       const result = await AIChatSession.sendMessage(prompt);
@@ -144,49 +150,47 @@ function EducationForm({ enableNext }) {
       enableNext(true);
     }
   };
+  
 
   return (
-    <div className="p-4 shadow-lg rounded-lg border-t-primary border-t-4 mt-10 ">
+    <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
       <h2 className="font-bold text-lg">Education</h2>
-      <p>Add your educational details here..</p>
+      <p>Add your educational details here.</p>
 
       <div>
         {educationalList.map((formData, index) => (
           <div
             key={index}
-            className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-3 border-2 p-4 rounded-lg shadow-md"
+            className="grid grid-cols-2 mt-5 gap-3 border-2 p-4 rounded-lg shadow-md"
           >
-            <div className="col-span-1 md:col-span-2">
+            <div className="col-span-2">
               <label className="text-sm">University Name</label>
               <Input
                 name="universityName"
                 value={formData.universityName}
                 onChange={(event) => handleInputChange(event, index)}
                 required
-                className="w-full"
               />
             </div>
-            <div className="col-span-1">
+            <div>
               <label className="text-sm">Degree</label>
               <Input
                 name="degree"
                 value={formData.degree}
                 onChange={(event) => handleInputChange(event, index)}
                 required
-                className="w-full"
               />
             </div>
-            <div className="col-span-1">
+            <div>
               <label className="text-sm">Subject</label>
               <Input
                 name="subject"
                 value={formData.subject}
                 onChange={(event) => handleInputChange(event, index)}
                 required
-                className="w-full"
               />
             </div>
-            <div className="col-span-1">
+            <div>
               <label className="text-sm">Start Date</label>
               <Input
                 name="startDate"
@@ -194,10 +198,9 @@ function EducationForm({ enableNext }) {
                 value={formData.startDate}
                 onChange={(event) => handleInputChange(event, index)}
                 required
-                className="w-full"
               />
             </div>
-            <div className="col-span-1">
+            <div>
               <label className="text-sm">End Date</label>
               <Input
                 name="endDate"
@@ -205,10 +208,9 @@ function EducationForm({ enableNext }) {
                 value={formData.endDate}
                 onChange={(event) => handleInputChange(event, index)}
                 required
-                className="w-full"
               />
             </div>
-            <div className="col-span-1 md:col-span-2">
+            <div className="col-span-2">
               <div className="flex justify-between items-center my-4">
                 <label className="text-sm">Description</label>
                 <Button
@@ -227,23 +229,21 @@ function EducationForm({ enableNext }) {
                 value={formData.description}
                 onChange={(event) => handleInputChange(event, index)}
                 required
-                
-                className="w-full h-32"
               />
             </div>
           </div>
         ))}
       </div>
       <div className="flex flex-col md:flex-row justify-between gap-4 mt-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <Button variant="outline" onClick={addNewExp} className="w-full md:w-auto">
+      <div className="flex flex-col md:flex-row gap-4">
+          <Button variant="outline" onClick={addNewExp}>
             + Add More Education
           </Button>
-          <Button onClick={removeList} disabled={educationalList.length <= 1 || loadingGenerate} className="w-full md:w-auto">
+          <Button onClick={removeList} disabled={educationalList.length <= 1 || loadingGenerate}>
             - Remove
           </Button>
         </div>
-        <Button type="submit" onClick={onSave} disabled={loadingSave || loadingGenerate} className="w-full md:w-auto">
+        <Button type="submit" onClick={onSave} disabled={loadingSave || loadingGenerate}>
           {loadingSave ? <LoaderCircle className="animate-spin" /> : "Save"}
         </Button>
       </div>
