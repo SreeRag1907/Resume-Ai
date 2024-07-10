@@ -1,19 +1,31 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import GlobalApi from "../../../../service/GlobalApi";
-import Header from "@/components/custom/Header";
-import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import PreviewSection from "@/dashboard/resume/components/PreviewSection";
-import DownloadConfirmationDialog from "./download/DownloadConfirmationDialog";
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import GlobalApi from '../../../../service/GlobalApi';
+import Header from '@/components/custom/Header';
+import { ResumeInfoContext } from '@/context/ResumeInfoContext';
+import PreviewSection from '@/dashboard/resume/components/PreviewSection';
+import DownloadConfirmationDialog from './download/DownloadConfirmationDialog';
+import { Button } from '@/components/ui/button';
 
 function ViewResume() {
   const { resumeId } = useParams();
   const [resumeInfo, setResumeInfo] = useState();
   const resumeRef = useRef();
+  const [scale, setScale] = useState(1);
 
   useEffect(() => {
     getResumeInfo();
   }, []);
+
+  useEffect(() => {
+    if (resumeRef.current) {
+      const container = resumeRef.current;
+      const content = container.firstChild;
+      const scaleX = container.clientWidth / content.offsetWidth;
+      const scaleY = container.clientHeight / content.offsetHeight;
+      setScale(Math.min(scaleX, scaleY));
+    }
+  }, [resumeInfo]);
 
   const getResumeInfo = () => {
     GlobalApi.GetResumeById(resumeId)
@@ -22,13 +34,20 @@ function ViewResume() {
         setResumeInfo(resp.data.data.attributes);
       })
       .catch((error) => {
-        console.error("Error fetching resume:", error);
+        console.error('Error fetching resume:', error);
       });
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
     <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo }}>
       <Header />
+      <Link to={`/dashboard/resume/${resumeId}/edit`} className="m-4">
+        <Button className="mt-4">Edit Resume</Button>
+      </Link>
       <div className="py-5 px-2 md:px-10">
         <h2 className="text-center text-2xl font-medium">
           Congrats! Your AI Generated Resume is ready!
@@ -38,13 +57,10 @@ function ViewResume() {
         </p>
         <div className="flex justify-center my-5 gap-4">
           <DownloadConfirmationDialog resumeRef={resumeRef} />
+          <Button onClick={handlePrint}>Print Resume</Button>
         </div>
-        <p className="text-center text-sm font-normal text-gray-700 my-5 block sm:hidden italic">
-          **To Download the Resume Properly I recommend you to use the Website in
-          Laptop/PC**
-        </p>
         <div className="resume-container" ref={resumeRef}>
-          <PreviewSection />
+            <PreviewSection />
         </div>
       </div>
     </ResumeInfoContext.Provider>

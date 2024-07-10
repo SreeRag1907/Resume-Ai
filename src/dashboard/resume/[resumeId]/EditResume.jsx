@@ -26,9 +26,9 @@ function EditResume() {
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 p-10 gap-10">
         {/* Form Section */}
         <FormSection />
-
         {/* Preview Section */}
         <PreviewSection />
+
       </div>
     </ResumeInfoContext.Provider>
   );

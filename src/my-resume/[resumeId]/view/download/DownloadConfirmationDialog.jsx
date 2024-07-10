@@ -1,4 +1,3 @@
-// DownloadConfirmationDialog.js
 import React, { useState } from "react";
 import {
   Dialog,
@@ -10,30 +9,39 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const DownloadConfirmationDialog = ({ resumeRef }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDownload = async () => {
-    const element = resumeRef.current;
-    const canvas = await html2canvas(element);
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("resume.pdf");
-
-    setIsOpen(false); // Close the dialog after download
+    const content = resumeRef.current;
+  
+    if (!content) {
+      console.error("Content ref is not defined");
+      return;
+    }
+  
+    try {
+      const canvas = await html2canvas(content, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: [canvas.width, canvas.height],
+      });
+  
+      pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+      pdf.save("resume.pdf");
+  
+      setIsOpen(false); // Close the dialog after download
+    } catch (error) {
+      console.error("Error generating PDF", error);
+    }
   };
+  
+  
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

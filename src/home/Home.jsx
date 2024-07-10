@@ -52,6 +52,7 @@ function Home() {
                 </div>
               </div>
             </section>
+          
 
             <section className="py-14 bg-white z-50 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12 border rounded-2xl border-pink-500/40 shadow-pink-500 shadow-inner mb-10">
               <h2 className="font-bold text-3xl">How it Works?</h2>
@@ -101,7 +102,7 @@ function Home() {
           </div>
         </div>
       </div>
-    </>
+      </>
   );
 }
 
