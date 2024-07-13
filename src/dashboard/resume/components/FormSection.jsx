@@ -9,13 +9,21 @@ import SkillForm from "./form/SkillForm";
 import { Link, Navigate, useParams } from "react-router-dom";
 import ThemeColor from "./ThemeColor";
 
-function FormSection() {
-  const [activeIndex, setActiveIndex] = useState(1);
-  const [enableNext, setEnableNext] = useState(false);
+function FormSection({ activeIndex, setActiveIndex }) {
+  const [enableNext, setEnableNext] = useState(true);
   const { resumeId } = useParams();
 
+  const handleNext = () => {
+    if (activeIndex < 5) {
+      setActiveIndex(activeIndex + 1);
+    } else if (activeIndex === 5) {
+      // Move to Preview section after Skills
+      setActiveIndex(6);
+    }
+  };
+
   return (
-    <div className="p-4">
+    <div className="w-full">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
         <div className="flex gap-4">
           <Link to={"/dashboard"}>
@@ -35,21 +43,17 @@ function FormSection() {
               <span className="hidden md:inline">Prev</span>
             </Button>
           )}
-          <Button
-            className="flex gap-2 p-2 md:p-4"
-            onClick={() => {
-              if (activeIndex === 5) {
-                // Handle transition to ViewSection
-                setActiveIndex(6);
-              } else {
-                setActiveIndex(activeIndex + 1);
-              }
-            }}
-            disabled={activeIndex < 5 && !enableNext}
-          >
-            {activeIndex === 5 ? "View" : "Next"}
-            <ArrowRight size={20} />
-          </Button>
+          {/* Show Next/Preview button */}
+          {activeIndex < 6 && (
+            <Button
+              className="flex gap-2 p-2 md:p-4"
+              onClick={handleNext}
+              disabled={!enableNext}
+            >
+              <span>{activeIndex === 5 ? 'Preview' : 'Next'}</span>
+              <ArrowRight size={20} />
+            </Button>
+          )}
         </div>
       </div>
       {/* Personal section */}
@@ -64,7 +68,7 @@ function FormSection() {
       {activeIndex === 3 && (
         <EducationForm enableNext={(v) => setEnableNext(v)} />
       )}
-      {/* Professional exp */}
+      {/* Professional experience */}
       {activeIndex === 4 && (
         <ExperienceForm enableNext={(v) => setEnableNext(v)} />
       )}
@@ -72,7 +76,7 @@ function FormSection() {
       {activeIndex === 5 && <SkillForm enableNext={(v) => setEnableNext(v)} />}
       {/* View Section */}
       {activeIndex === 6 && (
-        <Navigate to={"/my-resume/" + resumeId + "/view"} />
+        <Navigate to={`/my-resume/${resumeId}/view`} />
       )}
     </div>
   );

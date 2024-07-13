@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import { GrDrag } from "react-icons/gr"; // Import the drag icon
-import PersonalDetailPreview from "./preview/PersonalDetailPreview";
-import SummaryPreview from "./preview/SummaryPreview";
-import ExperiencePreview from "./preview/ExperiencePreview";
-import SkillPreview from "./preview/SkillPreview";
-import EducationPreview from "./preview/EducationPreview";
+import PersonalDetailPreview from "../../../../dashboard/resume/components/preview/PersonalDetailPreview";
+import SummaryPreview from "../../../../dashboard/resume/components/preview/SummaryPreview";
+import ExperiencePreview from "../../../../dashboard/resume/components/preview/ExperiencePreview";
+import SkillPreview from "../../../../dashboard/resume/components/preview/SkillPreview";
+import EducationPreview from "../../../../dashboard/resume/components/preview/EducationPreview";
 
 const PreviewSection = () => {
   const { resumeInfo } = useContext(ResumeInfoContext);
@@ -19,49 +18,35 @@ const PreviewSection = () => {
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
-
     const newOrder = Array.from(draggableSections);
     const [movedSection] = newOrder.splice(result.source.index, 1);
     newOrder.splice(result.destination.index, 0, movedSection);
-
     setDraggableSections(newOrder);
   };
 
   const renderSection = (section) => {
-    switch (section) {
-      case "PersonalDetailPreview":
-        return <PersonalDetailPreview resumeInfo={resumeInfo} />;
-      case "SummaryPreview":
-        return <SummaryPreview resumeInfo={resumeInfo} />;
-      case "EducationPreview":
-        return <EducationPreview resumeInfo={resumeInfo} />;
-      case "ExperiencePreview":
-        return <ExperiencePreview resumeInfo={resumeInfo} />;
-      case "SkillPreview":
-        return <SkillPreview resumeInfo={resumeInfo} />;
-      default:
-        return null;
-    }
+    const components = {
+      PersonalDetailPreview,
+      SummaryPreview,
+      EducationPreview,
+      ExperiencePreview,
+      SkillPreview,
+    };
+    const Component = components[section];
+    return Component ? <Component resumeInfo={resumeInfo} /> : null;
   };
 
   return (
     <div
-      className="shadow-lg h-screen p-12 border-t-[20px] custom-scrollbar"
-      style={{
-        borderColor: resumeInfo?.themeColor,
-      }}
+      className="shadow-lg p-4 border-t-[10px] text-sm"
+      style={{ borderColor: resumeInfo?.themeColor }}
     >
-      {/* Personal section */}
       <PersonalDetailPreview resumeInfo={resumeInfo} />
-
-      {/* Summary */}
       <SummaryPreview resumeInfo={resumeInfo} />
-
-      {/* Draggable Sections */}
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="draggableSections">
           {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef} className="min-h-[50px]">
+            <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
               {draggableSections.map((section, index) => (
                 <Draggable key={section} draggableId={section} index={index}>
                   {(provided) => (
@@ -69,11 +54,8 @@ const PreviewSection = () => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className="draggable-section cursor-move relative"
+                      className="draggable-section cursor-move"
                     >
-                      <div className="absolute top-5 left-2 opacity-50">
-                        <GrDrag />
-                      </div>
                       {renderSection(section)}
                     </div>
                   )}
